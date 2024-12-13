@@ -1,0 +1,39 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -pthread
+
+# Библиотека utils
+LIBRARY = libutils.a
+LIB_OBJECTS = utils.o
+
+# Указание исполняемых файлов
+CLIENT = client
+SERVER = server
+
+# Указание всех объектов
+ALL = $(CLIENT) $(SERVER)
+
+all: $(LIBRARY) $(ALL)
+
+# Сборка библиотеки
+$(LIBRARY): $(LIB_OBJECTS)
+	ar rcs $(LIBRARY) $(LIB_OBJECTS)
+
+# Сборка клиента
+$(CLIENT): $(CLIENT).c $(LIBRARY)
+	$(CC) $(CFLAGS) -o $(CLIENT) $(CLIENT).c $(LIBRARY)
+
+# Сборка сервера
+$(SERVER): $(SERVER).c $(LIBRARY)
+	$(CC) $(CFLAGS) -o $(SERVER) $(SERVER).c $(LIBRARY)
+
+# Сборка объекта для библиотеки
+utils.o: utils.c utils.h
+	$(CC) $(CFLAGS) -c utils.c
+
+# Очистка
+clean:
+	rm -f $(ALL) $(LIB_OBJECTS) $(LIBRARY)
+
+# Файлы для отладки
+debug: CFLAGS += -g
+debug: clean all

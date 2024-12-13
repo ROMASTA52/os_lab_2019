@@ -1,0 +1,27 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -pthread
+
+# Указание исполняемых файлов
+CLIENT = client
+SERVER = server
+
+# Указание всех объектов
+ALL = $(CLIENT) $(SERVER)
+
+all: $(ALL)
+
+# Сборка клиента
+$(CLIENT): $(CLIENT).c
+	$(CC) $(CFLAGS) -o $(CLIENT) $(CLIENT).c
+
+# Сборка сервера
+$(SERVER): $(SERVER).c
+	$(CC) $(CFLAGS) -o $(SERVER) $(SERVER).c
+
+# Очистка
+clean:
+	rm -f $(ALL)
+
+# Файлы для отладки
+debug: CFLAGS += -g
+debug: clean all
